@@ -60,9 +60,9 @@ export default function ResultView({ result, onBackToUpload, onFullReset }: Resu
         <div className="flex items-center gap-2.5 flex-wrap">
           <div className="flex items-center gap-1.5 px-2.5 py-0.5 bg-isro-50 border border-isro-200 rounded-md text-isro-700 text-[11px] font-bold uppercase tracking-wider">
             <Target size={12} />
-            <span>Geometric Correspondence Matrix</span>
+            <span>Registration Result</span>
           </div>
-          <h1 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">Co-Registration Computation Complete</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">Image Analysis Complete</h1>
           <span className="hidden sm:inline-block text-[10px] text-gray-500 font-mono bg-gray-100 border border-gray-200 px-2 py-0.5 rounded">
             Session {result.sessionId} · {new Date(result.processingTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
@@ -74,7 +74,7 @@ export default function ResultView({ result, onBackToUpload, onFullReset }: Resu
             onClick={onBackToUpload}
             className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
           >
-            <ArrowLeft size={13} /> Return to Data Ingest
+            <ArrowLeft size={13} /> Back to Upload
           </button>
 
           <button
@@ -90,7 +90,7 @@ export default function ResultView({ result, onBackToUpload, onFullReset }: Resu
             onClick={onFullReset}
             className="flex items-center gap-1.5 px-3.5 py-1.5 bg-isro-700 text-white rounded-lg text-xs font-bold hover:bg-isro-800 transition-colors shadow-xs"
           >
-            <RotateCcw size={13} /> Reset Pipeline
+            <RotateCcw size={13} /> Start Fresh
           </button>
         </div>
       </div>
@@ -104,9 +104,9 @@ export default function ResultView({ result, onBackToUpload, onFullReset }: Resu
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-sm font-bold text-red-950">Spatial Disparity Detected!</h2>
+                <h2 className="text-sm font-bold text-red-950">Images look different!</h2>
                 <span className="px-2 py-0.5 rounded-full text-[9px] font-black bg-red-600 text-white uppercase tracking-wider">
-                  Correspondence Match Failed
+                  Registration Failed
                 </span>
                 <span className="text-[11px] font-bold text-red-700">
                   • Only {(metrics.ransacInlierRatio * 100).toFixed(1)}% inliers (Dominant Red Lines)
@@ -127,7 +127,7 @@ export default function ResultView({ result, onBackToUpload, onFullReset }: Resu
               onClick={onBackToUpload}
               className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold text-xs rounded-lg shadow-sm transition-all"
             >
-              <RotateCcw size={13} /> Ingest New Sensor Data
+              <RotateCcw size={13} /> Try Another Image
             </button>
           </div>
         </div>

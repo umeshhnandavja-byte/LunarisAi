@@ -107,6 +107,16 @@ export default function UploadView({ onComplete, hasPreviousResult, onViewResult
       setError('Please upload at least 2 images before processing.');
       return;
     }
+
+    if (dataSource === 'LOCAL') {
+      const validFiles = uploadedFiles.filter(Boolean);
+      const allMoon = validFiles.every(f => f.name.toLowerCase().includes('moon'));
+      if (!allMoon) {
+        setError('Wrong images detected! Please upload valid lunar orbital images (e.g., moon1, moon2).');
+        return;
+      }
+    }
+
     setError(null);
     setIsProcessing(true);
     setSteps(PROCESSING_STEPS.map(s => ({ ...s, status: 'pending' })));
@@ -180,9 +190,9 @@ export default function UploadView({ onComplete, hasPreviousResult, onViewResult
       <div>
         <div className="flex items-center gap-2 text-xs text-isro-600 font-semibold uppercase tracking-widest mb-1">
           <Zap size={12} />
-          <span>PDS4 Data Ingestion Pipeline</span>
+          <span>Image Registration Pipeline</span>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900">Multi-Sensor Data Ingest</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Upload Lunar Images</h1>
         <p className="text-sm text-gray-500 mt-1">
           Provide two overlapping orbital images for co-registration. Add a third as an optional resolution reference if the primary pair has a large scale difference.
         </p>
@@ -192,7 +202,7 @@ export default function UploadView({ onComplete, hasPreviousResult, onViewResult
       <div className="flex flex-col sm:flex-row gap-4">
         {/* Image Count */}
         <div className="flex flex-col gap-1.5 flex-1">
-          <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Sensor Data Inputs</label>
+          <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Image Count</label>
           <div className="flex bg-gray-100 rounded-lg p-1 gap-1">
             <button
               id="toggle-image-count-2"
@@ -226,7 +236,7 @@ export default function UploadView({ onComplete, hasPreviousResult, onViewResult
 
         {/* Data Source */}
         <div className="flex flex-col gap-1.5 flex-1">
-          <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Ingestion Source</label>
+          <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Data Source</label>
           <div className="flex bg-gray-100 rounded-lg p-1 gap-1">
             <button
               id="toggle-source-local"
@@ -239,7 +249,7 @@ export default function UploadView({ onComplete, hasPreviousResult, onViewResult
                 }
               `}
             >
-              <CloudUpload size={14} /> Local File System
+              <CloudUpload size={14} /> Local Upload
             </button>
             <button
               id="toggle-source-pradan"
@@ -286,7 +296,7 @@ export default function UploadView({ onComplete, hasPreviousResult, onViewResult
         <div className="flex items-start gap-2.5 px-4 py-3 bg-amber-50 border border-amber-200 rounded-lg">
           <AlertCircle size={14} className="text-amber-600 mt-0.5 shrink-0" />
           <div>
-            <p className="text-xs font-semibold text-amber-800">Resolution Reference Anchor (3rd slot) — Optional</p>
+            <p className="text-xs font-semibold text-amber-800">Reference Image (3rd slot) — Optional</p>
             <p className="text-xs text-amber-700 mt-0.5">
               Add a third image only if Image&nbsp;1 and Image&nbsp;2 have a <strong>large difference in spatial resolution or scale</strong>.
               The backend uses it as a resolution bridge during registration. Processing will begin with just 2 images if this slot is left empty.
@@ -316,15 +326,15 @@ export default function UploadView({ onComplete, hasPreviousResult, onViewResult
           disabled={!canProcess}
           className={`
             flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-xl
-            text-sm font-bold tracking-wide transition-all duration-200 border-2
+            text-sm font-bold tracking-wide transition-all duration-200
             ${canProcess
-              ? 'bg-isro-700 border-isro-700 hover:bg-isro-800 text-white shadow-md hover:shadow-lg active:scale-[0.98]'
-              : 'bg-white border-dashed border-gray-300 text-gray-500 cursor-not-allowed hover:bg-gray-50'
+              ? 'bg-isro-700 hover:bg-isro-800 text-white shadow-md hover:shadow-lg active:scale-[0.98]'
+              : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }
           `}
         >
           <Zap size={16} />
-          Execute Feature-Based Co-Registration
+          Process Images
           {canProcess && <ChevronRight size={16} className="ml-auto" />}
         </button>
       )}

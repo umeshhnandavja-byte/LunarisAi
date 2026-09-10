@@ -1,0 +1,83 @@
+/* ─── LUNARIS Design System ─────────────────────────────── */
+
+:root {
+  --bg: #F9F8F6;
+  --bg-warm: #F4F3EF;
+  --surface: #FFFFFF;
+  --surface-dim: #F0EFEBcc;
+  --border: #E2E0DA;
+  --border-light: #EDECEA;
+
+  --text-primary: #1A1A1C;
+  --text-secondary: #5A5A60;
+  --text-muted: #9898A0;
+  --text-accent: #2E5FAF;
+
+  --accent: #3B6FBF;
+  --accent-light: #E8EDF7;
+  --accent-glow: rgba(59, 111, 191, 0.15);
+
+  --moon-grey: #C8C4BC;
+  --moon-light: #E8E4DC;
+  --moon-shadow: #2A2820;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-sine: cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+/* ─── Reset ─────────────────────────────────────────────── */
+
+.landing-wrapper *, .landing-wrapper *::before, .landing-wrapper *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .landing-wrapper *, .landing-wrapper *::before, .landing-wrapper *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.landing-wrapper {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100svh;
+}
+
+/* ─── Typography ─────────────────────────────────────────── */
+
+.landing-wrapper h1, .landing-wrapper h2, .landing-wrapper h3, .landing-wrapper h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.landing-wrapper p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────── */
+
+/* Reverted scrollbar to not affect global Next.js app styles */

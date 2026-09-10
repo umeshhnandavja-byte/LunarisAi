@@ -1,0 +1,60 @@
+========================================================================
+   🌙 LUNARIS — ISRO Lunar Image Registration & Analysis Platform
+                  QUICK START GUIDE FOR TEAM MEMBERS
+========================================================================
+
+Dear Team Member,
+
+Here is everything you need to run and test the project on your machine.
+
+------------------------------------------------------------------------
+STEP 1: EXTRACT THE ZIP FILE
+------------------------------------------------------------------------
+1. Right-click the downloaded .zip file.
+2. Click "Extract All..." (choose any folder on your computer).
+3. Open the extracted folder.
+   (IMPORTANT: Do NOT double-click files while inside the zip file without extracting!)
+
+------------------------------------------------------------------------
+STEP 2: RUNNING THE APPLICATION (1-CLICK LAUNCH)
+------------------------------------------------------------------------
+Simply double-click:
+    👉 "START_EVERYTHING.bat"
+
+A menu will open with choices:
+    [1] Start Frontend Only  (Press 1 or Enter - Recommended for Demo)
+    [2] Start Full Stack     (Frontend + Python Backend)
+    [3] Start Backend Only
+    [4] Open Presentation Guide PDF
+
+Choose Option 1 (or just press Enter):
+- If this is your first time running it, it will automatically install packages (~1 minute).
+- Your web browser will automatically open at: http://localhost:3000
+
+Alternatively:
+- To run ONLY the frontend directly: Open "lunaris" folder and double-click "DOUBLE_CLICK_TO_RUN.bat".
+- To run ONLY the backend directly: Open "backend" folder and double-click "START_BACKEND.bat".
+
+------------------------------------------------------------------------
+PREREQUISITES:
+------------------------------------------------------------------------
+1. For Frontend (Web App & Demo):
+   - Node.js (v18 or higher): Download from https://nodejs.org (LTS version).
+   - If Node.js is already installed on your PC, you are all set!
+
+2. For Backend (Only needed if running full Python ML algorithms):
+   - Python 3.9+ (Download from https://www.python.org/downloads/)
+   - Make sure to check "Add Python to PATH" during installation.
+
+------------------------------------------------------------------------
+PRESENTATION & DEMO RESOURCES:
+------------------------------------------------------------------------
+- LUNARIS_SIH26166_Presentation_Guide.pdf:
+  Contains the 15-20 minute presentation script, judges Q&A cheat-sheet, and slide walkthrough.
+- Test images are pre-loaded in lunaris/public/ (lunar_test_A.jpg, lunar_test_B.jpg, moon1.jpg - moon6.jpg).
+
+------------------------------------------------------------------------
+HOW TO STOP THE APP:
+------------------------------------------------------------------------
+Simply close the black command prompt terminal window when you are done.
+========================================================================

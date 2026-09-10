@@ -54,8 +54,6 @@ const MINERAL_CONFIGS: Record<string, { color: string, isRare: boolean, clusters
 
 export function SplitViewer({ feature, opacity, region }: Props) {
   const containerRef      = useRef<HTMLDivElement>(null)
-  const overlayCanvasRef  = useRef<HTMLCanvasElement>(null)
-  const baseImageDataRef  = useRef<ImageData | null>(null)
   const [split, setSplit] = useState(52)
   const [dragging, setDragging] = useState(false)
   const [ready, setReady]   = useState(false)
@@ -70,66 +68,12 @@ export function SplitViewer({ feature, opacity, region }: Props) {
     img.crossOrigin = "anonymous"
     img.src = "/lunar-panchromatic.png"
     img.onload = () => {
-      const c = document.createElement("canvas")
-      c.width  = img.naturalWidth
-      c.height = img.naturalHeight
-      const ctx = c.getContext("2d")
-      if (!ctx) return
-      ctx.drawImage(img, 0, 0)
-      baseImageDataRef.current = ctx.getImageData(0, 0, c.width, c.height)
-      const oc = overlayCanvasRef.current
-      if (oc) { oc.width = c.width; oc.height = c.height }
       setAspectRatio(`${img.naturalWidth}/${img.naturalHeight}`)
       setReady(true)
       // Hide scanning skeleton after a brief moment
       setTimeout(() => setScanning(false), 600)
     }
   }, [])
-
-  useEffect(() => {
-    if (!ready) return
-    if (feature === "thermal") return
-
-    const canvas = overlayCanvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    
-    const config = MINERAL_CONFIGS[feature]
-    if (!config) return
-
-    const w = canvas.width
-    const h = canvas.height
-
-    const targetX = region.landingSuitability.targetPos.x / 100
-    const targetY = region.landingSuitability.targetPos.y / 100
-
-    // Draw realistic glowing heatmap clusters
-    config.clusters.forEach((cluster, index) => {
-      // Force the first cluster to dynamically align with the region's target position,
-      // but retain its slight unique offset from the original center (0.75, 0.85)
-      const actualX = index === 0 ? targetX + (cluster.x - 0.75) : cluster.x
-      const actualY = index === 0 ? targetY + (cluster.y - 0.85) : cluster.y
-
-      const cx = actualX * w
-      const cy = actualY * h
-      const r = cluster.radius * Math.max(w, h)
-
-      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r)
-      grad.addColorStop(0, `rgba(${config.color}, ${cluster.intensity})`)
-      grad.addColorStop(0.3, `rgba(${config.color}, ${cluster.intensity * 0.6})`)
-      grad.addColorStop(0.7, `rgba(${config.color}, ${cluster.intensity * 0.2})`)
-      grad.addColorStop(1, `rgba(${config.color}, 0)`)
-
-      ctx.fillStyle = grad
-      ctx.beginPath()
-      ctx.arc(cx, cy, r, 0, Math.PI * 2)
-      ctx.fill()
-    })
-
-  }, [feature, ready, region])
 
   const updateFromClientX = useCallback((clientX: number) => {
     const el = containerRef.current
@@ -198,12 +142,25 @@ export function SplitViewer({ feature, opacity, region }: Props) {
               draggable={false}
             />
           ) : (
-            <canvas
-              ref={overlayCanvasRef}
-              aria-hidden="true"
-              className="absolute inset-0 h-full w-full object-cover mix-blend-screen"
-              style={{ opacity }}
-            />
+            <div className="absolute inset-0 h-full w-full mix-blend-screen pointer-events-none" style={{ opacity }}>
+              {MINERAL_CONFIGS[feature]?.clusters.map((cluster, index) => {
+                const minConfig = MINERAL_CONFIGS[feature]
+                if (!minConfig) return null
+                return (
+                  <div
+                    key={index}
+                    className="absolute rounded-full -translate-x-1/2 -translate-y-1/2"
+                    style={{
+                      left: `${cluster.x * 100}%`,
+                      top: `${cluster.y * 100}%`,
+                      width: `${cluster.radius * 200}%`,
+                      aspectRatio: "1 / 1",
+                      background: `radial-gradient(circle, rgba(${minConfig.color}, ${cluster.intensity}) 0%, rgba(${minConfig.color}, ${cluster.intensity * 0.6}) 30%, rgba(${minConfig.color}, ${cluster.intensity * 0.2}) 70%, rgba(${minConfig.color}, 0) 100%)`
+                    }}
+                  />
+                )
+              })}
+            </div>
           )}
         </div>
 
