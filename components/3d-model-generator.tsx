@@ -12,7 +12,7 @@ type ProcessState = 'idle' | 'processing' | 'complete';
 // --- 3D STL Terrain Component ---
 function StlTerrain() {
   const meshRef = useRef<THREE.Mesh>(null);
-  
+
   // Load the actual .stl file from the public directory
   const geometry = useLoader(STLLoader, '/crater.stl');
 
@@ -31,9 +31,9 @@ function StlTerrain() {
 
   return (
     <mesh ref={meshRef} geometry={geometry} receiveShadow castShadow position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <meshStandardMaterial 
-        color="#8a8d91" 
-        roughness={0.8} 
+      <meshStandardMaterial
+        color="#8a8d91"
+        roughness={0.8}
         metalness={0.2}
         flatShading={true}
       />
@@ -64,7 +64,7 @@ export default function ThreeDModelGenerator() {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    
+
     // Simulate adding multiple files
     const newFiles = Array.from(e.dataTransfer.files).map(f => f.name);
     if (newFiles.length > 0) {
@@ -85,7 +85,7 @@ export default function ThreeDModelGenerator() {
     setProcessState('processing');
     setTimeout(() => setProcessState('complete'), 2500);
   };
-  
+
   const handleReset = () => {
     setProcessState('idle');
     setFiles([]);
@@ -95,10 +95,10 @@ export default function ThreeDModelGenerator() {
 
   return (
     <div className="relative h-screen w-full bg-[#111111] overflow-hidden font-sans text-slate-200">
-      
+
       {/* 3D Viewer Background */}
       <div className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing z-0">
-        
+
         {/* Empty State Background Grid */}
         {processState === 'idle' && (
           <div className="absolute inset-0 flex items-center justify-center opacity-10">
@@ -122,28 +122,28 @@ export default function ThreeDModelGenerator() {
             <ambientLight intensity={0.2} />
             <directionalLight position={[15, 20, 5]} intensity={2.5} castShadow shadow-mapSize-width={2048} shadow-mapSize-height={2048} />
             <directionalLight position={[-15, 5, -15]} intensity={0.5} color="#4775ff" />
-            
+
             <Suspense fallback={null}>
               <StlTerrain />
             </Suspense>
-            
-            <Grid 
-              position={[0, -2.1, 0]} 
-              args={[50, 50]} 
-              cellColor="#333" 
-              sectionColor="#444" 
-              fadeDistance={30} 
+
+            <Grid
+              position={[0, -2.1, 0]}
+              args={[50, 50]}
+              cellColor="#333"
+              sectionColor="#444"
+              fadeDistance={30}
             />
-            <OrbitControls 
-              enableDamping 
-              dampingFactor={0.05} 
-              maxPolarAngle={Math.PI / 2.1} 
-              minDistance={5} 
-              maxDistance={40} 
+            <OrbitControls
+              enableDamping
+              dampingFactor={0.05}
+              maxPolarAngle={Math.PI / 2.1}
+              minDistance={5}
+              maxDistance={40}
             />
           </Canvas>
         )}
-        
+
         {/* HUD Overlay when complete */}
         {processState === 'complete' && (
           <div className="absolute bottom-8 right-8 z-20 flex gap-4 pointer-events-none">
@@ -167,7 +167,7 @@ export default function ThreeDModelGenerator() {
 
       {/* Foreground Left Panel (Glassmorphism) */}
       <div className="absolute top-8 left-8 bottom-8 w-[400px] z-30 flex flex-col gap-4">
-        
+
         {/* Header Panel */}
         <div className="bg-white/90 backdrop-blur-xl border border-white/50 rounded-2xl p-6 shadow-2xl shadow-black/10">
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 mb-1">3D Generator</h1>
@@ -184,7 +184,7 @@ export default function ThreeDModelGenerator() {
           </div>
 
           {/* Drag & Drop Zone */}
-          <div 
+          <div
             onClick={() => document.getElementById('file-upload')?.click()}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
@@ -197,18 +197,18 @@ export default function ThreeDModelGenerator() {
             <UploadCloud className={`w-10 h-10 mb-3 ${isDragging ? 'text-blue-500 animate-bounce' : 'text-slate-400'}`} />
             <p className="text-sm font-medium text-slate-700">Drag & Drop files or click to select</p>
             <p className="text-xs text-slate-500 mt-2 font-mono">Accepts .TIFF, .RAW, .XML</p>
-            <input 
-              id="file-upload" 
-              type="file" 
-              multiple 
+            <input
+              id="file-upload"
+              type="file"
+              multiple
               accept=".tiff,.tif,.raw,.xml"
-              className="hidden" 
+              className="hidden"
               onChange={(e) => {
                 if (e.target.files && e.target.files.length > 0) {
                   const newFiles = Array.from(e.target.files).map(f => f.name);
                   setFiles(prev => [...prev, ...newFiles]);
                 }
-              }} 
+              }}
             />
           </div>
 
@@ -223,7 +223,7 @@ export default function ThreeDModelGenerator() {
                 <div key={idx} className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-lg group shadow-sm">
                   <FileImage className="w-5 h-5 text-blue-500" />
                   <span className="text-sm font-mono text-slate-700 truncate flex-grow">{file}</span>
-                  <button 
+                  <button
                     onClick={() => setFiles(f => f.filter((_, i) => i !== idx))}
                     className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-500 transition-all"
                   >
@@ -236,7 +236,7 @@ export default function ThreeDModelGenerator() {
 
           {/* Actions */}
           <div className="pt-4 border-t border-slate-200 space-y-3">
-            <button 
+            <button
               onClick={() => {
                 if (processState === 'idle') handleGenerate();
                 else if (processState === 'complete') handleReset();
@@ -246,17 +246,17 @@ export default function ThreeDModelGenerator() {
             >
               {processState === 'idle' ? 'Synthesize Terrain' : (processState === 'processing' ? 'Processing...' : 'Reset Workspace')}
             </button>
-            
+
             {processState === 'complete' && (
               <div className="grid grid-cols-2 gap-2">
-                <button 
+                <button
                   className="w-full bg-white hover:bg-slate-50 text-slate-800 font-medium py-3 px-2 rounded-xl flex items-center justify-center gap-2 transition-all border border-slate-300 shadow-sm text-sm"
                   onClick={() => alert('Downloading GeoTIFF metadata...')}
                 >
                   <Download className="w-4 h-4 shrink-0" />
                   Export .GeoTIFF
                 </button>
-                <a 
+                <a
                   href="/crater.stl"
                   download="generated_crater.stl"
                   className="w-full bg-white hover:bg-slate-50 text-slate-800 font-medium py-3 px-2 rounded-xl flex items-center justify-center gap-2 transition-all border border-slate-300 shadow-sm text-sm"
